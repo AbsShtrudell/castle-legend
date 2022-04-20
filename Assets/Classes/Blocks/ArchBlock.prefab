@@ -5,7 +5,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1291484163336298355, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
@@ -18,7 +17,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: DisabledPoints.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: DisabledPoints.Array.data[0].x
@@ -67,6 +66,18 @@ PrefabInstance:
     - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: DisabledPoints.Array.data[3].z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[0].face
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[1].face
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4743868509653146963, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[3].face
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5948751351498143862, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: m_Mesh
@@ -125,5 +136,4 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 47685ee0129ff6049b925d4b064468a3, type: 2}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: baf85fa325454a147b641fcd46b465e5, type: 3}

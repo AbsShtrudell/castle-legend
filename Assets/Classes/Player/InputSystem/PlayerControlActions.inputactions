@@ -1,0 +1,34 @@
+{
+    "name": "PlayerControlActions",
+    "maps": [
+        {
+            "name": "Build",
+            "id": "65c1f73b-76df-42b3-b558-7e1517fdfb53",
+            "actions": [
+                {
+                    "name": "Place",
+                    "type": "Button",
+                    "id": "626f896c-7cb4-4365-a7e6-f713436988e1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "771c28dd-0010-4dcf-af2a-f82d74abf395",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Place",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

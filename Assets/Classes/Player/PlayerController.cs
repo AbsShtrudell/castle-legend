@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,30 +6,52 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public int MoveSpeed;
+    private PlayerControlActions playerActions;
 
+    private RaycastHit cursorHitData;
 
-    void Start()
+    [SerializeField]
+    private GameObject block; 
+
+    private void Awake()
     {
-        
+        playerActions = new PlayerControlActions();
     }
 
-    void Update()
+    private void OnEnable()
     {
-        
+        playerActions.Build.Place.performed += PlaceObject;
+        playerActions.Build.Enable();
     }
 
-    public void OnRotate(InputValue input)
+    private void OnDisable()
     {
-        Debug.Log("rotate");
+        playerActions.Build.Disable();
+    }
+    private void Update()
+    {
+        UpdateMouseWorldPosition();
+
+
+        if (cursorHitData.collider.CompareTag("Block"))
+        {
+            block.GetComponent<SnapPointsManager>().SnapBlock(cursorHitData.collider.GetComponent<SnapPointsManager>().GetClosestSnapPoint(cursorHitData.normal, cursorHitData.point));
+        }
+
     }
 
-    public void OnMove(InputValue input)
+    private void UpdateMouseWorldPosition()
     {
-        Vector2 InputVec = input.Get<Vector2>();
-        Vector3 MoveVector = new Vector3(InputVec.x, 0, InputVec.y);
-        transform.Translate(MoveVector);
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hitData;
+        if (Physics.Raycast(ray, out hitData, 1000))
+        {
+            cursorHitData = hitData;
+        }
+    }
 
-        Debug.Log("move");
-    }   
+    private void PlaceObject(InputAction.CallbackContext inputValue)
+    {
+       
+    }
 }
