@@ -5,13 +5,16 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1291484163336298355, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -2432090755550338912, guid: e785719d49f3f604685512754f8a7fd8, type: 3}
+    - target: {fileID: 1291484163336298355, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5948751351498143862, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -64,10 +67,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: StandartBlock
       objectReference: {fileID: 0}
+    - target: {fileID: 7080200230510197722, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8795454359546163487, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8795454359546163487, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 47685ee0129ff6049b925d4b064468a3, type: 2}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
