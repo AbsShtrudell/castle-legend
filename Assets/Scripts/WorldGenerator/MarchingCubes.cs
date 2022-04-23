@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * to-do
+ * 
+ * disable invisible blocks by checking grid
+ */
 public class MarchingCubes : MonoBehaviour
 {
 	[Header("General Setting")]
 	[SerializeField]
-	private GameObject block;
-	[SerializeField]
-	private GameObject chunk;
+	private GameObject blockRef;
 	[SerializeField]
 	private Material material;
 	[Space()]
@@ -18,7 +21,7 @@ public class MarchingCubes : MonoBehaviour
 	private int height = 10;
 	[Space()]
 	[SerializeField]
-	private Vector3 ChunkSize;
+	private Vector3Int ChunkSize;
 
 
 	[Header("Noise Setting")]
@@ -32,36 +35,33 @@ public class MarchingCubes : MonoBehaviour
 	bool[,,] blocks;
 	float[,,] terrainMap;
 
-	MeshFilter meshFilter; //delete
 	Bounds bounds;
-	List<Chunk> chunks;
-	List<Vector3> vertices;
-	List<int> triangles;
-
-	private void Awake()
-	{
-		bounds = block.GetComponent<MeshFilter>().sharedMesh.bounds;
-		meshFilter = GetComponent<MeshFilter>();
-		terrainMap = new float[width + 1, height + 1, width + 1];
-		blocks = new bool[width, height, width];
-		List<Vector3> vertices = new List<Vector3>();
-		List<int> triangles = new List<int>();
-		List<Chunk> chunks = new List<Chunk>();
-	}
+	List<Chunk> chunks = new List<Chunk>();
+	List<Vector3> vertices = new List<Vector3>();
+	List<int> triangles = new List<int>();
 
 	private void Start()
     {
+		bounds = blockRef.GetComponent<MeshFilter>().sharedMesh.bounds;
+		terrainMap = new float[width * ChunkSize.x + 1, height + 1, width * ChunkSize.z + 1];
+		blocks = new bool[width * ChunkSize.x, height, width * ChunkSize.z];
+		for (int x = 0; x < width * ChunkSize.x + 1; x++)
+			for (int z = 0; z < width * ChunkSize.z + 1; z++)
+				for (int y = 0; y < height; y++) terrainMap[x, y, z] = 1f;
+		CreateChunks();
 		PopulateTerrainMap();
-		CreateMeshData();
+		foreach(Chunk chunk in chunks)
+			CreateMeshData(chunk);
 	}
 
-	void CreateChunks()
+    void CreateChunks()
     {
 		for(int x = 0; x < width; x++)
         {
 			for(int z =0; z < width; z++)
             {
-				CreateChunk(new Vector3Int(x, 0, z));
+				chunks.Add(CreateChunk(new Vector3Int(x, 0, z)));
+				chunks[chunks.Count - 1].SetUp(material);
 			}
         }
     }
@@ -75,15 +75,15 @@ public class MarchingCubes : MonoBehaviour
 		return newChunk;
 	}
 
-	void CreateMeshData()
-	{
+	void CreateMeshData(Chunk chunk)
+    {
 		ClearMeshData();
 
-		for (int x = 0; x < width - 1; x++)
+		for (int x = chunk.coord.x * ChunkSize.x; x < chunk.coord.x * ChunkSize.x + ChunkSize.x; x++)
 		{
-			for (int y = 0; y < height; y++)
+			for (int y = 0; y < height - 1; y++)
 			{
-				for (int z = 0; z < width - 1; z++)
+				for (int z = chunk.coord.z * ChunkSize.z; z < chunk.coord.z * ChunkSize.z + ChunkSize.z; z++)
 				{
 					float[] cube = new float[8];
 					for (int i = 0; i < 8; i++)
@@ -95,14 +95,14 @@ public class MarchingCubes : MonoBehaviour
 				}
 			}
 		}
-		BuildMesh();
+		BuildMesh(chunk);
 	}
 
 	void PopulateTerrainMap()
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < width * ChunkSize.x; x++)
 		{
-			for (int z = 0; z < width; z++)
+			for (int z = 0; z < width * ChunkSize.z; z++)
 			{
 				for (int y = 0; y < height; y++)
 				{
@@ -122,7 +122,19 @@ public class MarchingCubes : MonoBehaviour
 					blocks[x, y, z] = point == 0f;
 					if (blocks[x, y, z])
 					{
-						GameObject.Instantiate(block, transform.position + new Vector3(x * bounds.size.x + bounds.size.x / 2, y * bounds.size.y, z * bounds.size.z + bounds.size.z / 2), Quaternion.identity, transform);
+
+						GameObject block = GameObject.Instantiate(blockRef, transform.position + new Vector3(x * bounds.size.x + bounds.size.x / 2, y * bounds.size.y, z * bounds.size.z + bounds.size.z / 2), Quaternion.identity);
+						foreach(Chunk chunk in chunks)
+                        {
+							if (chunk.coord == new Vector3Int((int)x / ChunkSize.x, 0, (int)z / ChunkSize.z))
+							{
+								//BoxCollider collider = chunk.gameObject.AddComponent<BoxCollider>();
+								//collider.size = blockRef.GetComponent<MeshFilter>().sharedMesh.bounds.size;
+								//collider.center = new Vector3(x % ChunkSize.x * collider.size.x, y * collider.size.y, z % ChunkSize.z * collider.size.z);
+								block.transform.parent = chunk.transform;
+								break;
+							}
+                        }
 						for (int i = 0; i < 8; i++)
 						{
 							Vector3Int corner = new Vector3Int(x, y, z) + CornerTable[i];
@@ -185,14 +197,14 @@ public class MarchingCubes : MonoBehaviour
 		triangles.Clear();
 	}
 
-	void BuildMesh()
+	void BuildMesh(Chunk chunk)
 	{
 		Mesh mesh = new Mesh();
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
 		mesh.RecalculateNormals();
-		meshFilter.mesh = mesh;
-		GetComponent<MeshCollider>().sharedMesh = mesh;
+		chunk.GetComponent<MeshFilter>().sharedMesh = mesh;
+		chunk.GetComponent<MeshCollider>().sharedMesh = mesh;
 	}
 
 	Vector3Int[] CornerTable = new Vector3Int[8] {
