@@ -5,14 +5,21 @@ using UnityEngine;
 
 public class BuildListController : MonoBehaviour
 {
+
+    [SerializeField]
+    private GameObject playerRef;
+
     private RectTransform BuildListPanel;
     private RectTransform BuildListButton;
     private bool listOpened = false;
+
+    private BuildItemsContainer buildBlocks;
 
     private void OnEnable()
     {
         BuildListPanel = transform.GetChild(0).GetComponent<RectTransform>();
         BuildListButton = transform.GetChild(1).GetComponent<RectTransform>();
+        buildBlocks = playerRef.GetComponent<BuildItemsContainer>();
     }
 
     public void OnBuildListButtonClicked()

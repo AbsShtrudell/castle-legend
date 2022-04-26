@@ -51,10 +51,10 @@ public class TerrainGenerator : MonoBehaviour
 		foreach (Chunk chunk in chunks)
 			UpdateMeshData(chunk);
 		CreateAllVisibleBlocks();
-		Vector3 pos = new Vector3(GridSize.x * bounds.x , 0, GridSize.z * bounds.z ) + transform.position;
-		Vector2 sz = new Vector2(GridSize.x * bounds.x, GridSize.z * bounds.z );
-		GetComponent<EnvironmentGeneration>().GenerateEnvironment(transform.position, sz);
-	} //rewrite
+        Vector3 pos = new Vector3(GridSize.x * bounds.x, 0, GridSize.z * bounds.z) + transform.position;
+        Vector2 sz = new Vector2(GridSize.x * bounds.x, GridSize.z * bounds.z);
+        GetComponent<EnvironmentGeneration>().GenerateEnvironment(transform.position, sz);
+    } //rewrite
 
 	private void InitChunks()
 	{
