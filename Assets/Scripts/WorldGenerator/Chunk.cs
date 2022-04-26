@@ -8,7 +8,9 @@ public class Chunk : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
-
+    private LODGroup lodGroup;
+    private Material material;
+    private List<MeshRenderer> LODS = new List<MeshRenderer>();
     private List<KeyValuePair<Vector3, StaticBlock>> blocksMap = new List<KeyValuePair<Vector3, StaticBlock>>();
 
     private void SetUp(Material mat)
@@ -19,6 +21,7 @@ public class Chunk : MonoBehaviour
         meshFilter = go.GetComponent<MeshFilter>();
         meshRenderer = go.GetComponent<MeshRenderer>();
         meshCollider = go.GetComponent<MeshCollider>();
+        lodGroup = GetComponent<LODGroup>();
 
         if (meshFilter == null)
         {
@@ -35,15 +38,21 @@ public class Chunk : MonoBehaviour
             meshCollider = go.gameObject.AddComponent<MeshCollider>();
         }
 
+        if (lodGroup == null)
+        {
+            lodGroup = gameObject.AddComponent<LODGroup>();
+        }
+
         meshCollider.enabled = false;
         meshCollider.enabled = true;
 
-
-        meshRenderer.material = mat;
+        material = mat;
+        meshRenderer.material = material;
 
         go.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         gameObject.layer = LayerMask.NameToLayer("Terrain");
-        transform.tag = "Terrain";
+
+        //transform.tag = "Terrain";
     }
 
     public void SetMesh(Mesh mesh)
@@ -53,6 +62,31 @@ public class Chunk : MonoBehaviour
 
         meshCollider.enabled = false;
         meshCollider.enabled = true;
+    }
+
+    public void SetLOD(Mesh[] meshes)
+    {
+        if (meshes != null)
+        {
+            LOD[] lods = new LOD[meshes.Length + 1];
+            Renderer[] renderers = new Renderer[1];
+            renderers[0] = meshRenderer;
+            lods[0] = new LOD(1.0F / (1), renderers);
+            for (int i = 1; i < meshes.Length; i++)
+            {
+                GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) LOD {i + 1}");
+                go.transform.parent = gameObject.transform;
+                LODS.Add(go.gameObject.AddComponent<MeshRenderer>());
+                go.gameObject.AddComponent<MeshFilter>().sharedMesh = meshes[i];
+                LODS[LODS.Count - 1].sharedMaterial = material;
+                renderers = new Renderer[1];
+                renderers[0] = go.GetComponent<Renderer>();
+                lods[i] = new LOD(1.0F / (i + 1), renderers);
+            }
+            lodGroup.SetLODs(lods);
+            lodGroup.RecalculateBounds();
+            lodGroup.size = 50;
+        }
     }
 
     public void AddBlock(ref Vector3 position,ref Vector3 blockSize)

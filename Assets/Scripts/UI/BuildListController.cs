@@ -2,39 +2,68 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildListController : MonoBehaviour
 {
 
     [SerializeField]
     private GameObject playerRef;
+    [SerializeField]
+    private GameObject listElement;
 
     private RectTransform BuildListPanel;
     private RectTransform BuildListButton;
+    private RectTransform ListButton;
+
     private bool listOpened = false;
 
     private BuildItemsContainer buildBlocks;
-
-    private void OnEnable()
+    private float listWidth;
+    private void Start()
     {
         BuildListPanel = transform.GetChild(0).GetComponent<RectTransform>();
-        BuildListButton = transform.GetChild(1).GetComponent<RectTransform>();
+        BuildListButton = transform.parent.GetChild(2).GetComponent<RectTransform>();
+        ListButton = listElement.GetComponent<RectTransform>();
         buildBlocks = playerRef.GetComponent<BuildItemsContainer>();
+        listWidth = CalculateListWidth();
+        CreateListElements();
+        LeanTween.moveLocalX(BuildListPanel.gameObject, listWidth, 0.2f);
     }
 
     public void OnBuildListButtonClicked()
     {
-        if (!listOpened)
+        if (listOpened)
         {
-            LeanTween.size(BuildListPanel, new Vector2(800, 180), Time.deltaTime * 20f);
-            LeanTween.rotateZ(BuildListButton.gameObject, 180, Time.deltaTime * 20f);
-            listOpened = true;
+            LeanTween.moveLocalX(BuildListPanel.gameObject, listWidth, 0.2f);
+            LeanTween.rotateZ(BuildListButton.gameObject, 180, 0.2f);
+            listOpened = false;
         }
         else
         {
-            LeanTween.size(BuildListPanel, new Vector2(0, 180),Time.deltaTime * 20f);
-            LeanTween.rotateZ(BuildListButton.gameObject, 0, Time.deltaTime * 20f);
-            listOpened = false;
+            LeanTween.moveLocalX(BuildListPanel.gameObject, 0, 0.2f);
+            LeanTween.rotateZ(BuildListButton.gameObject, 0, 0.2f);
+            listOpened = true;
+        }
+    }
+
+    public void OnBuildItemSelected(int index)
+    {
+        Debug.Log(index);
+    }
+
+    private float CalculateListWidth()
+    {
+        return (ListButton.sizeDelta.x + 20f) * buildBlocks.GetBuildBlocks().Length + 10f;
+    }
+
+    private void CreateListElements()
+    {
+        for(int i = 0; i < buildBlocks.GetBuildBlocks().Length; i++)
+        {
+            int buttonIndex = i;
+            GameObject go = Instantiate(ListButton.gameObject, BuildListPanel);
+            go.GetComponent<Button>().onClick.AddListener(() => OnBuildItemSelected(buttonIndex));
         }
     }
 }

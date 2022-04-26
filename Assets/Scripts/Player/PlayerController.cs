@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
         {
             cursorHitData.collider.GetComponent<DynamicBlock>().SnapBlock(block.GetComponent<DynamicBlock>(), cursorHitData.collider.GetComponent<DynamicBlock>().GetClosestSnapPoint(cursorHitData.normal, cursorHitData.point));
         }
-        if (cursorHitData.collider.CompareTag("Terrain") && placed != true)
+        if (cursorHitData.collider.gameObject.layer == 3&& placed != true)
         {
             //Chunk chunk = cursorHitData.collider.GetComponent<Chunk>();
             StaticBlock stblock = cursorHitData.collider.GetComponent<Chunk>().GetBlock((BoxCollider)cursorHitData.collider);
