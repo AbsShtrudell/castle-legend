@@ -10,14 +10,16 @@ public class CameraController : MonoBehaviour
     private InputAction movement;
     private Transform cameraTransform;
 
+    [Space()]
     [SerializeField]
-    private float maxSpeed = 5f;
+    private float maxSpeed = 10f;
     private float speed;
     [SerializeField]
     private float acceleration = 10f;
     [SerializeField]
     private float damping = 15f;
 
+    [Space()]
     [SerializeField]
     private float stepSize = 2f; 
     [SerializeField]
@@ -29,8 +31,13 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float zoomSpeed = 2f;
 
+    [Space()]
     [SerializeField]
     private float maxRotationSpeed = 1f;
+    [SerializeField, Range(-90f, 90f)]
+    private float maxRotationAngle = 45f;
+    [SerializeField, Range(-90f, 90f)]
+    private float minRotationAngle = 5f;
 
     [SerializeField, Range(0f, 1f)]
     private float edgeTolerance = 0.05f;
@@ -43,10 +50,6 @@ public class CameraController : MonoBehaviour
 
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
-
-    private Vector3 cursorWorldPosition;
-
-    Vector3 startDrag;
 
     private void Awake()
     {
@@ -136,7 +139,9 @@ public class CameraController : MonoBehaviour
         if (!Mouse.current.rightButton.isPressed) return;
 
         float value = inputValue.ReadValue<Vector2>().x;
-        transform.rotation = Quaternion.Euler(0f, value * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
+        float valueY = inputValue.ReadValue<Vector2>().y;
+        cameraTransform.localRotation = Quaternion.Euler(Mathf.Clamp(-valueY * maxRotationSpeed + cameraTransform.rotation.eulerAngles.x, minRotationAngle,maxRotationAngle), 0, 0);
+        transform.rotation = Quaternion.Euler(0, value * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
     }
 
     private void ZoomCamera(InputAction.CallbackContext inputValue)
@@ -160,7 +165,7 @@ public class CameraController : MonoBehaviour
         zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
 
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
-        cameraTransform.LookAt(this.transform);
+        //cameraTransform.LookAt(this.transform);
     }
 
     private void CheckMouseAtScreenEdge()
