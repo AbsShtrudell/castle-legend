@@ -15,7 +15,7 @@ public class SnapPoint
         localPosition = localposition;
         this.parent = parent;
     }
-    public SnapPoint(Cube.Faces face, Vector3Int blockGridPosition, Vector3 localposition, IBlock parent)
+    public SnapPoint(Faces face, Vector3Int blockGridPosition, Vector3 localposition, IBlock parent)
     {
         pointData = new SnapPointData(face, blockGridPosition);
         localPosition = localposition;
@@ -45,24 +45,23 @@ public struct SnapPointData
     [SerializeField]
     public Vector3Int blockGridPosition;
     [SerializeField]
-    public Cube.Faces face
-    {
-        set { _faceNormal = Cube.GetFaceNormal(value); }
-    }
+    public Faces face;
+
     private Vector3 _faceNormal;
 
     [HideInInspector]
     public Vector3 faceNormal
     {
-        get { return _faceNormal; }
+        get { return Cube.GetFaceNormal(face); }
         set { _faceNormal = value; face = Cube.GetFace(value); }
     }
 
-    public SnapPointData(Cube.Faces faceValue, Vector3Int blockGridPositionValue)
+    public SnapPointData(Faces faceValue, Vector3Int blockGridPositionValue)
     {
         blockGridPosition = blockGridPositionValue;
         _faceNormal = Cube.GetFaceNormal(faceValue);
-        faceNormal = _faceNormal;
+
         face = faceValue;
+        faceNormal = _faceNormal;
     }
 }

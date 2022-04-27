@@ -4,8 +4,6 @@ using UnityEngine;
 
 public static class Cube
 {
-	public enum Faces
-	{ Back = 0, Bottom, Front, Left, Right, Head, Zero };
 
 	private static Vector3[] faces = new Vector3[6] {
 		Vector3.back,
@@ -52,3 +50,6 @@ public static class Cube
 	}
 
 }
+
+public enum Faces
+{ Back = 0, Bottom, Front, Left, Right, Head, Zero };

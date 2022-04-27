@@ -31,6 +31,7 @@ public class Chunk : MonoBehaviour
         if (meshRenderer == null)
         {
             meshRenderer = go.gameObject.AddComponent<MeshRenderer>();
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
 
         if (meshCollider == null)
@@ -43,51 +44,48 @@ public class Chunk : MonoBehaviour
             lodGroup = gameObject.AddComponent<LODGroup>();
         }
 
+        gameObject.AddComponent<StaticBlockQueue>();
+
         meshCollider.enabled = false;
         meshCollider.enabled = true;
 
         material = mat;
         meshRenderer.material = material;
 
-        go.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-        gameObject.layer = LayerMask.NameToLayer("Terrain");
-
-        //transform.tag = "Terrain";
+        go.gameObject.layer = LayerMask.NameToLayer("Terrain");
+        gameObject.layer = LayerMask.NameToLayer("StaticBlock");
     }
 
     public void SetMesh(Mesh mesh)
     {
         meshFilter.sharedMesh = mesh;
         meshCollider.sharedMesh = mesh;
-
         meshCollider.enabled = false;
         meshCollider.enabled = true;
     }
 
-    public void SetLOD(Mesh[] meshes)
-    {
-        if (meshes != null)
-        {
-            LOD[] lods = new LOD[meshes.Length + 1];
-            Renderer[] renderers = new Renderer[1];
-            renderers[0] = meshRenderer;
-            lods[0] = new LOD(1.0F / (1), renderers);
-            for (int i = 1; i < meshes.Length; i++)
-            {
-                GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) LOD {i + 1}");
-                go.transform.parent = gameObject.transform;
-                LODS.Add(go.gameObject.AddComponent<MeshRenderer>());
-                go.gameObject.AddComponent<MeshFilter>().sharedMesh = meshes[i];
-                LODS[LODS.Count - 1].sharedMaterial = material;
-                renderers = new Renderer[1];
-                renderers[0] = go.GetComponent<Renderer>();
-                lods[i] = new LOD(1.0F / (i + 1), renderers);
-            }
-            lodGroup.SetLODs(lods);
-            lodGroup.RecalculateBounds();
-            lodGroup.size = 50;
-        }
-    }
+    //public void SetLOD(Mesh[] meshes)
+    //{
+    //    LOD[] lods = new LOD[4];
+    //    Renderer[] renderers = new Renderer[1];
+    //    renderers[0] = meshRenderer;
+    //    lods[0] = new LOD(1.0F / (1), renderers);
+
+    //    for (int i = 1; i < meshes.Length; i++)
+    //    {
+    //        GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) LOD {i + 1}");
+    //        go.transform.parent = gameObject.transform;
+    //        LODS.Add(go.gameObject.AddComponent<MeshRenderer>());
+    //        go.gameObject.AddComponent<MeshFilter>().sharedMesh = meshes[i-1];
+    //        LODS[LODS.Count - 1].sharedMaterial = material;
+    //        renderers = new Renderer[1];
+    //        renderers[0] = go.GetComponent<Renderer>();
+    //        lods[i] = new LOD(1.0F / (i + 1), renderers);
+    //    }
+    //    lodGroup.SetLODs(lods);
+    //    lodGroup.RecalculateBounds();
+    //    lodGroup.size = 50;
+    //}
 
     public void AddBlock(ref Vector3 position,ref Vector3 blockSize)
     {

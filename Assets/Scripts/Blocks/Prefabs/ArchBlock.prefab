@@ -145,7 +145,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7743896342522072069, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: DisabledPoints.Array.size
-      value: 0
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7743896342522072069, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[1].face
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7743896342522072069, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[2].face
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7743896342522072069, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
+      propertyPath: DisabledPoints.Array.data[3].face
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8795454359546163487, guid: baf85fa325454a147b641fcd46b465e5, type: 3}
       propertyPath: m_Materials.Array.data[0]

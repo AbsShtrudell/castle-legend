@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 1291484163336298355}
   - component: {fileID: 5948751351498143862}
   - component: {fileID: 8795454359546163487}
+  - component: {fileID: -133425564246805416}
   - component: {fileID: 7743896342522072069}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Block
-  m_TagString: Block
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -66,7 +67,7 @@ MeshRenderer:
   m_GameObject: {fileID: 7080200230510197722}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 0
+  m_ReceiveShadows: 1
   m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 0
@@ -99,6 +100,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-133425564246805416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080200230510197722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db79372305e349945a303978b3013462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7743896342522072069
 MonoBehaviour:
   m_ObjectHideFlags: 0

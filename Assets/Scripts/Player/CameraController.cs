@@ -165,7 +165,6 @@ public class CameraController : MonoBehaviour
         zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
 
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
-        //cameraTransform.LookAt(this.transform);
     }
 
     private void CheckMouseAtScreenEdge()

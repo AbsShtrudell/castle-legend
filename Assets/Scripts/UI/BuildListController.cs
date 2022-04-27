@@ -28,6 +28,7 @@ public class BuildListController : MonoBehaviour
         buildBlocks = playerRef.GetComponent<BuildItemsContainer>();
         listWidth = CalculateListWidth();
         CreateListElements();
+        BuildListPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, listWidth);
         LeanTween.moveLocalX(BuildListPanel.gameObject, listWidth, 0.2f);
     }
 
@@ -49,7 +50,8 @@ public class BuildListController : MonoBehaviour
 
     public void OnBuildItemSelected(int index)
     {
-        Debug.Log(index);
+        playerRef.GetComponent<PlayerController>().EnableBuildMode();
+        playerRef.GetComponent<PlayerController>().ChangeActiveObj(index);
     }
 
     private float CalculateListWidth()

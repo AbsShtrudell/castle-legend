@@ -44,7 +44,7 @@ public class StaticBlock : IBlock
         if (snapPoint == null) return false;
 
         Vector3 blockPosition = block.GetRotation() * blockSnapPoint.GetLocalPosition() + block.GetPosition();
-        block.SetPosition(block.GetPosition() + Vector3.Normalize(blockPosition - thisPosition) * Vector3.Distance(blockPosition, thisPosition));
+        block.SetPosition(block.GetPosition() + Vector3.Normalize(thisPosition - blockPosition) * Vector3.Distance(thisPosition, blockPosition));
         snapPoint.Active(false);
         return true;
     }
@@ -112,7 +112,7 @@ public class StaticBlock : IBlock
         SnapPointData[] pointsData = new SnapPointData[pointsAmount];
 
         int counter = 0;
-        for (Cube.Faces face = 0; face < Cube.Faces.Zero; face++)
+        for (Faces face = 0; face < Faces.Zero; face++)
         {
             int yLimit = (int)(pointsPerAxis.y * (Cube.GetFaceNormal(face).x == 0 ? Mathf.Abs(Cube.GetFaceNormal(face).z) : Mathf.Abs(Cube.GetFaceNormal(face).x)));
             int xLimit = (int)(pointsPerAxis.x * (Cube.GetFaceNormal(face).z == 0 ? Mathf.Abs(Cube.GetFaceNormal(face).y) : Mathf.Abs(Cube.GetFaceNormal(face).z)));

@@ -49,7 +49,9 @@ public class TerrainGenerator : MonoBehaviour
 		PopulateTerrainMap();
 
 		foreach (Chunk chunk in chunks)
+		{
 			UpdateMeshData(chunk);
+		}
 		CreateAllVisibleBlocks();
         Vector3 pos = new Vector3(GridSize.x * bounds.x, 0, GridSize.z * bounds.z) + transform.position;
         Vector2 sz = new Vector2(GridSize.x * bounds.x, GridSize.z * bounds.z);
@@ -155,7 +157,7 @@ public class TerrainGenerator : MonoBehaviour
 
 		Vector3 neighbourPosition;
 
-		for (Cube.Faces face = 0; face < Cube.Faces.Zero; face++)
+		for (Faces face = 0; face < Faces.Zero; face++)
 		{
 			neighbourPosition = Cube.GetFaceNormal(face) + position;
 
@@ -183,7 +185,7 @@ public class TerrainGenerator : MonoBehaviour
     {
 		Vector3 neighbourPosition;
 
-		for (Cube.Faces face = 0; face < Cube.Faces.Zero; face++)
+		for (Faces face = 0; face < Faces.Zero; face++)
 		{
 			neighbourPosition = Cube.GetFaceNormal(face) + position;
 

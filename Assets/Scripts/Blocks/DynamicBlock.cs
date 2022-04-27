@@ -83,13 +83,14 @@ public class DynamicBlock : MonoBehaviour, IBlock
 
     public SnapPoint GetActiveSnapPoint(Vector3 face)
     {
-        return GetClosestSnapPoint(face * -1, GetRotation() * cornerLocation);
+        return GetClosestSnapPoint(face * -1, cornerLocation);
     }
 
     private void CreateSnapPoints(SnapPointData[] pointsData)
     {
         for (int i = 0; i < pointsAmount; i++)
             snapPoints[i] = CreateSnapPoint(pointsData[i]);
+
     }
     private SnapPoint CreateSnapPoint(SnapPointData snapPointData)
     {
@@ -115,7 +116,7 @@ public class DynamicBlock : MonoBehaviour, IBlock
         SnapPointData[] pointsData = new SnapPointData[pointsAmount];
 
         int counter = 0;
-        for (Cube.Faces face = 0; face < Cube.Faces.Zero; face++)
+        for (Faces face = 0; face < Faces.Zero; face++)
         {
             int yLimit = (int)(pointsPerAxis.y * (Cube.GetFaceNormal(face).x == 0 ? Mathf.Abs(Cube.GetFaceNormal(face).z) : Mathf.Abs(Cube.GetFaceNormal(face).x)));
             int xLimit = (int)(pointsPerAxis.x * (Cube.GetFaceNormal(face).z == 0 ? Mathf.Abs(Cube.GetFaceNormal(face).y) : Mathf.Abs(Cube.GetFaceNormal(face).z)));
@@ -131,8 +132,10 @@ public class DynamicBlock : MonoBehaviour, IBlock
                     {
                         SnapPointData snapPoint = new SnapPointData(face, new Vector3Int(x, y, z));
                         if (!IsPointDisabled(snapPoint))
-                        pointsData[counter] = snapPoint;
-                        counter++;
+                        {
+                            pointsData[counter] = snapPoint;
+                            counter++;
+                        }
                         y++;
                     } while (y < yLimit);
                     x++;
@@ -147,7 +150,7 @@ public class DynamicBlock : MonoBehaviour, IBlock
     {
         foreach (SnapPointData point in DisabledPoints)
         {
-            if (position.faceNormal == point.faceNormal && position.blockGridPosition == point.blockGridPosition)
+            if (position.faceNormal == Cube.GetFaceNormal(point.face) && position.blockGridPosition == point.blockGridPosition)
             {
                 return true;
             }
@@ -186,7 +189,7 @@ public class DynamicBlock : MonoBehaviour, IBlock
     }
     public void SetRotation(float angle)
     {
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+        transform.Rotate(new Vector3(0, angle, 0));
     }
     public Quaternion GetRotation()
     {
