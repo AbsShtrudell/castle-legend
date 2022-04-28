@@ -45,6 +45,7 @@ public class Chunk : MonoBehaviour
         }
 
         gameObject.AddComponent<StaticBlockQueue>();
+        go.AddComponent<NavMeshSourceTag>();
 
         meshCollider.enabled = false;
         meshCollider.enabled = true;

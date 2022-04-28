@@ -29,6 +29,19 @@ public static class Cube
 
 	};
 
+	public static readonly Vector3Int[] CornerTableCenter = new Vector3Int[9] {
+
+		new Vector3Int(0, 0, 0),
+		new Vector3Int(-1, 1, -1),
+		new Vector3Int(1, 1, -1),
+		new Vector3Int(-1, 1, 1),
+		new Vector3Int(1, 1, 1),
+		new Vector3Int(-1, -1, -1),
+		new Vector3Int(1, -1, -1),
+		new Vector3Int(1, -1, 1),
+		new Vector3Int(-1, -1, 1),
+	};
+
 	public static readonly int[,] EdgeIndexes = new int[12, 2] {
 
 		{0, 1}, {1, 2}, {3, 2}, {0, 3}, {4, 5}, {5, 6}, {7, 6}, {4, 7}, {0, 4}, {1, 5}, {2, 6}, {3, 7}
