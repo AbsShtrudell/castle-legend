@@ -20,39 +20,45 @@ public class NavMeshManager
     public void UpdateNavMesh(LocalNavMesh caller)
     {
         int groupID = GetGroupID(caller);
+        int updateOldGroup = -1;
 
-        if(!NavMeshGroups[groupID].InGroupBounds(caller))
+        if (NavMeshGroups[groupID].GetMembers().Count != 1)
         {
-            NavMeshGroups[groupID].RemoveFromGroup(caller);
-            NavMeshGroups[groupID].UpdateGroupNavMesh();
+            if (!NavMeshGroups[groupID].InGroupBounds(caller))
+            {
+                NavMeshGroups[groupID].RemoveFromGroup(caller);
 
-            AddInEmptyGroup(caller);
+                updateOldGroup = groupID;
+                groupID = AddInEmptyGroup(caller);
+            }
         }
 
         for (int i = 0; i < NavMeshGroups.Count; i++)
         {
-            if (GetGroupID(caller) != i)
+            if (groupID != i)
             {
                 if (NavMeshGroups[i].InGroupBounds(caller))
                 {
                     NavMeshGroups.Remove(NavMeshGroup.MergeGroups(NavMeshGroups[GetGroupID(caller)], NavMeshGroups[i]));
+                    groupID = GetGroupID(caller);
                 }
             }
         }
 
-        NavMeshGroups[GetGroupID(caller)].UpdateGroupNavMesh();
+        NavMeshGroups[groupID].UpdateGroupNavMesh();
+
+        if(updateOldGroup != -1)
+        {
+            if (NavMeshGroups[groupID].GetMembers().Count != 0)
+                NavMeshGroups[updateOldGroup].UpdateGroupNavMesh();
+            else NavMeshGroups.Remove(NavMeshGroups[groupID]);
+        }
     }
 
-    private void AddInEmptyGroup(LocalNavMesh navMesh)
+    private int AddInEmptyGroup(LocalNavMesh navMesh)
     {
-        for(int i = 0; i < NavMeshGroups.Count; i++)
-        {
-            if(NavMeshGroups[i].GetMembers().Count == 0)
-            {
-                NavMeshGroups[i].AddInGroup(navMesh);
-            }
-        }
         NavMeshGroups.Add(new NavMeshGroup(new List<LocalNavMesh>() { navMesh }));
+        return NavMeshGroups.Count - 1;
     }
 
     private int GetGroupID(LocalNavMesh navMesh)
@@ -144,14 +150,18 @@ public class NavMeshManager
 
         public bool InGroupBounds(LocalNavMesh navMesh)
         {
-            NavMeshGroup group = new NavMeshGroup(null);
-
-            for (int i = 0; i < members.Count; i++)
+            if (members.Count != 0)
             {
-                if (navMesh != members[i]) group.AddInGroup(members[i]);
-            }
+                NavMeshGroup group = new NavMeshGroup(null);
 
-            return navMesh.InBounds(GetGroupBounds(group));
+                for (int i = 0; i < members.Count; i++)
+                {
+                    if (navMesh != members[i]) group.AddInGroup(members[i]);
+                }
+
+                return navMesh.InBounds(GetGroupBounds(group));
+            }
+            return false;
         }
 
         public static Bounds GetGroupBounds(NavMeshGroup group)

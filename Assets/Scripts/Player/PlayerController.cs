@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
         playerActions.Controll.Select.performed += SelectAction;
         playerActions.Controll.Order.performed += OrderAction;
         playerActions.Controll.Delete.performed += DeleteAction;
+
+        controllActionsMap.Enable();
     }
 
     private void OnDisable()
@@ -119,9 +121,9 @@ public class PlayerController : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         RaycastHit hitData;
-        if (Physics.Raycast(ray, out hitData, 1000, ((1 << 3) | (1 << 6))))
+        if (Physics.Raycast(ray, out hitData, 1000))//, ((1 << 7) | (1 << 6))))
         {
-            pawn.GetComponent<NavMeshAgent>().SetDestination(hitData.point);
+            pawn.GetComponent<Pawn>().MoveTo(hitData.point);
         }
     }
 

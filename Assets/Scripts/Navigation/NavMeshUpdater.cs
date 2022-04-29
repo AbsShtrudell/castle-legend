@@ -12,7 +12,7 @@ public static class NavMeshUpdater
 
         NavMeshSourceTag.Collect(ref sources);
 
-        if (asyncUpdate)
+        if (!asyncUpdate)
             NavMeshBuilder.UpdateNavMeshDataAsync(navMeshData, defaultBuildSettings, sources, bounds);
         else
             NavMeshBuilder.UpdateNavMeshData(navMeshData, defaultBuildSettings, sources, bounds);

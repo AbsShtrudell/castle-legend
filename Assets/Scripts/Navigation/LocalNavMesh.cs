@@ -8,29 +8,34 @@ public class LocalNavMesh : MonoBehaviour
 {
     NavMeshManager navMeshManager;
 
-    private Vector3 size;
-    private Vector3 position;
+    private Bounds bounds;
+    private float UpdateDistance;
 
     void OnEnable()
     {
-        position = transform.position;
+        bounds.center = transform.position;
     }
 
     private void Update()
     {
-        if (Vector3.Distance(position, transform.position) >= 5)
+        if (Vector3.Distance(bounds.center, transform.position) >= UpdateDistance)
         {
-            position = transform.position;
+            bounds.center = transform.position;
             navMeshManager.UpdateNavMesh(this);
         }
     }
 
     public Bounds GetBounds()
     {
-        return new Bounds(position, size);
+        return bounds;
     }
 
-    static Vector3 Quantize(Vector3 v, Vector3 quant)
+    public bool InBounds(Bounds bounds)
+    {
+        return GetBounds().Intersects(bounds);
+    }
+
+        static Vector3 Quantize(Vector3 v, Vector3 quant)
     {
         float x = quant.x * Mathf.Floor(v.x / quant.x);
         float y = quant.y * Mathf.Floor(v.y / quant.y);
@@ -40,7 +45,7 @@ public class LocalNavMesh : MonoBehaviour
 
     Bounds QuantizedBounds()
     {
-        return new Bounds(Quantize(transform.position, 0.1f * size), size);
+        return new Bounds(Quantize(transform.position, 0.1f * bounds.size), bounds.size);
     }
 
     void OnDrawGizmosSelected()
@@ -50,13 +55,8 @@ public class LocalNavMesh : MonoBehaviour
         Gizmos.DrawWireCube(bounds.center, bounds.size);
 
         Gizmos.color = Color.green;
-        var center = position;
-        Gizmos.DrawWireCube(center, size);
-    }
-
-    public bool InBounds(Bounds bounds)
-    {
-        return GetBounds().Intersects(bounds);
+        var center = bounds.center;
+        Gizmos.DrawWireCube(center, bounds.size);
     }
 
     public static class Factory
@@ -65,7 +65,11 @@ public class LocalNavMesh : MonoBehaviour
         {
             LocalNavMesh localNavMesh = target.gameObject.AddComponent<LocalNavMesh>();
 
-            localNavMesh.size = size;
+            localNavMesh.bounds = new Bounds(target.position, size);
+
+            localNavMesh.UpdateDistance = localNavMesh.bounds.size.x >= localNavMesh.bounds.size.z ? 
+                localNavMesh.bounds.size.z / 3 : localNavMesh.bounds.size.x / 3;
+
             localNavMesh.navMeshManager = manager;
             return localNavMesh;
         }
