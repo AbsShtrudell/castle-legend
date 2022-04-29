@@ -8,5 +8,6 @@ public class PlayerInstaller : MonoInstaller
     public override void InstallBindings()
     {
         GameObject playerInstance = Container.InstantiatePrefab(_playerPrefab);
+        
     }
 }

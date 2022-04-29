@@ -56,7 +56,6 @@ public class TerrainGenerator : MonoBehaviour
         Vector3 pos = new Vector3(GridSize.x * bounds.x, 0, GridSize.z * bounds.z) + transform.position;
         Vector2 sz = new Vector2(GridSize.x * bounds.x, GridSize.z * bounds.z);
         GetComponent<EnvironmentGeneration>().GenerateEnvironment(transform.position, sz);
-		//GetComponent<TerrainNavMeshBuilder>().UpdateNavMesh();
 	} //rewrite
 
 	private void InitChunks()
