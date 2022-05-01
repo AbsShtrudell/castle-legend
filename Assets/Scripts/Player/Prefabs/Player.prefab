@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5798329332031548703}
   - component: {fileID: 4940671783645193419}
+  - component: {fileID: 2370549926689650620}
   - component: {fileID: 1801455546249647980}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +44,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.19090424, g: 0.56706065, b: 0.735849, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -65,7 +66,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -76,6 +77,66 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &2370549926689650620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807883123357712948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 5798329332031548703}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 1
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!81 &1801455546249647980
 AudioListener:
   m_ObjectHideFlags: 0
@@ -95,7 +156,6 @@ GameObject:
   - component: {fileID: 5308072732547025704}
   - component: {fileID: 2933027767431509152}
   - component: {fileID: 7723568654784710851}
-  - component: {fileID: 4277388483090336854}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -133,7 +193,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898944588542985846}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -168,19 +228,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4277388483090336854
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1898944588542985846}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8832440440688536948
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,18 +276,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5711c362088bfe44185f9227fcc68a3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 12
   acceleration: 10
   damping: 15
   stepSize: 2
   zoomDampening: 7.5
   minHeight: 2
-  maxHeight: 13
+  maxHeight: 18
   zoomSpeed: 0.8
   maxRotationSpeed: 0.7
-  maxRotationAngle: 45
-  minRotationAngle: 5
-  edgeTolerance: 0.02
+  maxRotationAngle: 70
+  minRotationAngle: 10
+  edgeTolerance: 0.01
   useScreenEdge: 0
 --- !u!114 &-532074327540427581
 MonoBehaviour:
@@ -254,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c556e68d39c63bd41b16cbc4f231ebf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  block: {fileID: 0}
+  pawn: {fileID: 0}
 --- !u!114 &2882489590231754048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,4 +314,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2d0debbf2ccdf4b9daf8c43337541d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildBlocks: []
+  buildBlocks:
+  - buildBlock: {fileID: 1836044884824062427, guid: 83422fd5274d51a4193787567683344b, type: 3}
+    resourceType: 0
+    price: 10
+  - buildBlock: {fileID: 8081139789865204248, guid: 8576bb0aa5f2f744da3fe6a77a8ef272, type: 3}
+    resourceType: 0
+    price: 20
+  - buildBlock: {fileID: 8377635152776801387, guid: 8305482b07c580d4da0589234f671f84, type: 3}
+    resourceType: 0
+    price: 15

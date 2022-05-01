@@ -53,6 +53,15 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Delete"",
+                    ""type"": ""Button"",
+                    ""id"": ""e01b71aa-0f59-4d2e-9c95-9d71d4552f56"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -110,6 +119,17 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""action"": ""DisableBuildMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8944d56-e261-468e-8468-40ec3a7e9320"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -130,15 +150,6 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""name"": ""Order"",
                     ""type"": ""Button"",
                     ""id"": ""578caba9-577d-4992-8b52-3e019a73c84d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Delete"",
-                    ""type"": ""Button"",
-                    ""id"": ""5aa0d6a2-518f-49d2-aaf7-0cd6cb23fee9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -167,17 +178,6 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""action"": ""Order"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5ac1d96c-5781-48f5-8e68-b9e40c786db9"",
-                    ""path"": ""<Keyboard>/delete"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Delete"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -189,11 +189,11 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
         m_Build_Place = m_Build.FindAction("Place", throwIfNotFound: true);
         m_Build_Rotate = m_Build.FindAction("Rotate", throwIfNotFound: true);
         m_Build_DisableBuildMode = m_Build.FindAction("DisableBuildMode", throwIfNotFound: true);
+        m_Build_Delete = m_Build.FindAction("Delete", throwIfNotFound: true);
         // Controll
         m_Controll = asset.FindActionMap("Controll", throwIfNotFound: true);
         m_Controll_Select = m_Controll.FindAction("Select", throwIfNotFound: true);
         m_Controll_Order = m_Controll.FindAction("Order", throwIfNotFound: true);
-        m_Controll_Delete = m_Controll.FindAction("Delete", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -256,6 +256,7 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
     private readonly InputAction m_Build_Place;
     private readonly InputAction m_Build_Rotate;
     private readonly InputAction m_Build_DisableBuildMode;
+    private readonly InputAction m_Build_Delete;
     public struct BuildActions
     {
         private @PlayerControlActions m_Wrapper;
@@ -263,6 +264,7 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
         public InputAction @Place => m_Wrapper.m_Build_Place;
         public InputAction @Rotate => m_Wrapper.m_Build_Rotate;
         public InputAction @DisableBuildMode => m_Wrapper.m_Build_DisableBuildMode;
+        public InputAction @Delete => m_Wrapper.m_Build_Delete;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -281,6 +283,9 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @DisableBuildMode.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
                 @DisableBuildMode.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
                 @DisableBuildMode.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
+                @Delete.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
+                @Delete.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
+                @Delete.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
             }
             m_Wrapper.m_BuildActionsCallbackInterface = instance;
             if (instance != null)
@@ -294,6 +299,9 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @DisableBuildMode.started += instance.OnDisableBuildMode;
                 @DisableBuildMode.performed += instance.OnDisableBuildMode;
                 @DisableBuildMode.canceled += instance.OnDisableBuildMode;
+                @Delete.started += instance.OnDelete;
+                @Delete.performed += instance.OnDelete;
+                @Delete.canceled += instance.OnDelete;
             }
         }
     }
@@ -304,14 +312,12 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
     private IControllActions m_ControllActionsCallbackInterface;
     private readonly InputAction m_Controll_Select;
     private readonly InputAction m_Controll_Order;
-    private readonly InputAction m_Controll_Delete;
     public struct ControllActions
     {
         private @PlayerControlActions m_Wrapper;
         public ControllActions(@PlayerControlActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Select => m_Wrapper.m_Controll_Select;
         public InputAction @Order => m_Wrapper.m_Controll_Order;
-        public InputAction @Delete => m_Wrapper.m_Controll_Delete;
         public InputActionMap Get() { return m_Wrapper.m_Controll; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -327,9 +333,6 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @Order.started -= m_Wrapper.m_ControllActionsCallbackInterface.OnOrder;
                 @Order.performed -= m_Wrapper.m_ControllActionsCallbackInterface.OnOrder;
                 @Order.canceled -= m_Wrapper.m_ControllActionsCallbackInterface.OnOrder;
-                @Delete.started -= m_Wrapper.m_ControllActionsCallbackInterface.OnDelete;
-                @Delete.performed -= m_Wrapper.m_ControllActionsCallbackInterface.OnDelete;
-                @Delete.canceled -= m_Wrapper.m_ControllActionsCallbackInterface.OnDelete;
             }
             m_Wrapper.m_ControllActionsCallbackInterface = instance;
             if (instance != null)
@@ -340,9 +343,6 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @Order.started += instance.OnOrder;
                 @Order.performed += instance.OnOrder;
                 @Order.canceled += instance.OnOrder;
-                @Delete.started += instance.OnDelete;
-                @Delete.performed += instance.OnDelete;
-                @Delete.canceled += instance.OnDelete;
             }
         }
     }
@@ -352,11 +352,11 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
         void OnPlace(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnDisableBuildMode(InputAction.CallbackContext context);
+        void OnDelete(InputAction.CallbackContext context);
     }
     public interface IControllActions
     {
         void OnSelect(InputAction.CallbackContext context);
         void OnOrder(InputAction.CallbackContext context);
-        void OnDelete(InputAction.CallbackContext context);
     }
 }

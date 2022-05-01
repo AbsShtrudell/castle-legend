@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MeshBuilder
 {
-    private List<Vector3> _vertices = new List<Vector3>();
-    private List<int> _triangles = new List<int>();
+    private List<Vector3> vertices = new List<Vector3>();
+    private List<int> triangles = new List<int>();
 
     public void AddVertex(Vector3 vertex)
     {
-        _vertices.Add(vertex);
-        _triangles.Add(_vertices.Count - 1);
+        vertices.Add(vertex);
+        triangles.Add(vertices.Count - 1);
     }
 
     public void AddVertices(Vector3[] vertices)
@@ -19,8 +19,8 @@ public class MeshBuilder
         {
             for (int i = 0; i < vertices.Length; i++)
             {
-                _vertices.Add(vertices[i]);
-                _triangles.Add(_vertices.Count - 1);
+                this.vertices.Add(vertices[i]);
+                this.triangles.Add(this.vertices.Count - 1);
             }
         }
     }
@@ -28,15 +28,15 @@ public class MeshBuilder
     public Mesh BuildMesh()
     {
         Mesh mesh = new Mesh();
-        mesh.vertices = _vertices.ToArray();
-        mesh.triangles = _triangles.ToArray();
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
         return mesh;
     }
 
     public void ClearData()
     {
-        _vertices.Clear();
-        _triangles.Clear();
+        vertices.Clear();
+        triangles.Clear();
     }
 }

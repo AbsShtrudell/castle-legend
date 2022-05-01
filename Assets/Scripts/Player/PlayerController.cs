@@ -20,11 +20,18 @@ public class PlayerController : MonoBehaviour
     private DynamicBlock activeBlock;
     private BuildItemsContainer buildItemsContainer;
 
+    private ObjectPool<DynamicBlock>[] blockPools;
+
     public GameObject pawn;
     private void Awake()
     {
-        buildItemsContainer = GetComponent<BuildItemsContainer>();
+        buildItemsContainer = GetComponent<BuildItemsContainer>(); //zenjet
         playerActions = new PlayerControlActions();
+        blockPools = new ObjectPool<DynamicBlock>[buildItemsContainer.GetBuildBlocks().Length];
+
+        for (int i = 0; i < buildItemsContainer.GetBuildBlocks().Length; i++)
+            blockPools[i] = new ObjectPool<DynamicBlock>(buildItemsContainer.GetBuildBlocks()[i].buildBlock, 50);
+
         buildActionsMap = playerActions.Build;
         controllActionsMap = playerActions.Controll;
     }
@@ -34,10 +41,10 @@ public class PlayerController : MonoBehaviour
         playerActions.Build.Place.performed += PlaceObjectAction;
         playerActions.Build.DisableBuildMode.performed += DisableBuildModeAction;
         playerActions.Build.Rotate.performed += RotateAction;
+        playerActions.Build.Delete.performed += DeleteAction;
 
         playerActions.Controll.Select.performed += SelectAction;
         playerActions.Controll.Order.performed += OrderAction;
-        playerActions.Controll.Delete.performed += DeleteAction;
 
         controllActionsMap.Enable();
     }
@@ -47,10 +54,10 @@ public class PlayerController : MonoBehaviour
         playerActions.Build.Place.performed -= PlaceObjectAction;
         playerActions.Build.DisableBuildMode.performed -= DisableBuildModeAction;
         playerActions.Build.Rotate.performed -= RotateAction;
+        playerActions.Build.Delete.performed -= DeleteAction;
 
         playerActions.Controll.Select.performed -= SelectAction;
         playerActions.Controll.Order.performed -= OrderAction;
-        playerActions.Controll.Delete.performed -= DeleteAction;
 
         controllActionsMap.Disable();
         buildActionsMap.Disable();
@@ -95,9 +102,24 @@ public class PlayerController : MonoBehaviour
     {
         if (!pointerOverUI)
         {
-            destinationBlock.PlaceBlock(activeBlock, destinationBlock.GetClosestSnapPoint(destinationHit.normal, destinationHit.point));
-            activeBlock.GetComponent<Collider>().enabled = true;
-            SetActiveObj(lastBlockType);
+            if (destinationBlock != null)
+            {
+                destinationBlock.PlaceBlock(activeBlock, destinationBlock.GetClosestSnapPoint(destinationHit.normal, destinationHit.point));
+                activeBlock.GetComponent<Collider>().enabled = true;
+                SetActiveObj(lastBlockType);
+            }
+        }
+    }
+
+    private void DeleteAction(InputAction.CallbackContext obj)
+    {
+        if (!pointerOverUI)
+        {
+            if (destinationBlock != null)
+            {
+                destinationBlock.DeleteBlock();
+                destinationBlock = null;
+            }
         }
     }
 
@@ -112,24 +134,25 @@ public class PlayerController : MonoBehaviour
         activeBlock.SetRotation(angle);
     }
 
-    private void DeleteAction(InputAction.CallbackContext obj)
-    {
-        throw new NotImplementedException();
-    }
-
     private void OrderAction(InputAction.CallbackContext obj)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        RaycastHit hitData;
-        if (Physics.Raycast(ray, out hitData, 1000))//, ((1 << 7) | (1 << 6))))
+        if (!pointerOverUI)
         {
-            pawn.GetComponent<Pawn>().MoveTo(hitData.point);
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            RaycastHit hitData;
+            if (Physics.Raycast(ray, out hitData, 1000))
+            {
+                var nav = new NavMeshData();
+                var instance = NavMesh.AddNavMeshData(nav);
+                NavMeshUpdater.UpdateNavMesh(new Bounds(hitData.point, Vector3.one * 0.1f), nav);
+                pawn.GetComponent<Pawn>().MoveTo(hitData.point);
+            }
         }
     }
 
     private void SelectAction(InputAction.CallbackContext obj)
     {
-        throw new NotImplementedException();
+        
     }
 
     public void EnableBuildMode()
@@ -148,7 +171,7 @@ public class PlayerController : MonoBehaviour
         buildActionsMap.Disable();
         controllActionsMap.Enable();
 
-        GameObject.Destroy(activeBlock.gameObject);
+        activeBlock.ReturnToPool();
     }
 
     private void SetActiveObj(int index)
@@ -156,16 +179,15 @@ public class PlayerController : MonoBehaviour
         if (index < buildItemsContainer.GetBuildBlocks().Length && index >= 0)
         {
 
-            GameObject go = GameObject.Instantiate(buildItemsContainer.GetBuildBlocks()[index].buildBlock);
-            activeBlock = go.GetComponent<DynamicBlock>();
-            go.GetComponent<Collider>().enabled = false;
+            activeBlock = blockPools[index].Pull();
+            activeBlock.GetComponent<Collider>().enabled = false;
             lastBlockType = index;
         }
     }
 
     public void ChangeActiveObj(int index)
     {
-        if(activeBlock) GameObject.Destroy(activeBlock.gameObject);
+        if(activeBlock) activeBlock.ReturnToPool();
         SetActiveObj(index);
     }
 }

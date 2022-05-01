@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,41 @@ public class NavMeshManager
     {
         if (target != null)
         {
-            NavMeshList.Add(LocalNavMesh.Factory.Create(target, size, this));
+            NavMeshList.Add(LocalNavMesh.Factory.Create(target, size));
+
+            NavMeshList[NavMeshList.Count - 1].UpdateNavMesh += UpdateNavMesh;
+            NavMeshList[NavMeshList.Count - 1].Disabled += RemoveLocalNavMesh;
+
             NavMeshGroups.Add(new NavMeshGroup(new List<LocalNavMesh>() { NavMeshList[NavMeshList.Count - 1] }));
+
+            NavMeshGroups[NavMeshGroups.Count - 1].UpdateGroupNavMesh();
         }
+    }
+
+    public void ReturnLocalNavMesh(LocalNavMesh obj)
+    {
+        NavMeshList.Add(obj);
+
+        obj.UpdateNavMesh += UpdateNavMesh;
+        obj.Disabled += RemoveLocalNavMesh;
+        obj.Enabled -= ReturnLocalNavMesh;
+
+        NavMeshGroups.Add(new NavMeshGroup(new List<LocalNavMesh>() { obj }));
+
+        NavMeshGroups[NavMeshGroups.Count - 1].UpdateGroupNavMesh();
+    }
+
+    private void RemoveLocalNavMesh(LocalNavMesh obj)
+    {
+        int groupID = GetGroupID(obj);
+
+        NavMeshGroups[groupID].RemoveFromGroup(obj);
+
+        if (NavMeshGroups[groupID].GetMembers().Count == 0) NavMeshGroups.Remove(NavMeshGroups[groupID]);
+
+        obj.UpdateNavMesh -= UpdateNavMesh;
+        obj.Disabled -= RemoveLocalNavMesh;
+        obj.Enabled += ReturnLocalNavMesh;
     }
 
     public void UpdateNavMesh(LocalNavMesh caller)
@@ -22,7 +55,7 @@ public class NavMeshManager
         int groupID = GetGroupID(caller);
         int updateOldGroup = -1;
 
-        if (NavMeshGroups[groupID].GetMembers().Count != 1)
+        if (NavMeshGroups[groupID].GetMembers().Count > 1)
         {
             if (!NavMeshGroups[groupID].InGroupBounds(caller))
             {
@@ -103,7 +136,7 @@ public class NavMeshManager
 
             for (int i = 0; i < members.Count; i++)
             {
-                NavMeshUpdater.UpdateNavMesh(bounds, navMeshData, true); ;
+                NavMeshUpdater.UpdateNavMesh(bounds, navMeshData, false); ;
             }
         }
 

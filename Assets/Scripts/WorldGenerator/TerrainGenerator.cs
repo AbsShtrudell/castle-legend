@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -56,13 +57,14 @@ public class TerrainGenerator : MonoBehaviour
         Vector3 pos = new Vector3(GridSize.x * bounds.x, 0, GridSize.z * bounds.z) + transform.position;
         Vector2 sz = new Vector2(GridSize.x * bounds.x, GridSize.z * bounds.z);
         GetComponent<EnvironmentGeneration>().GenerateEnvironment(transform.position, sz);
-	} //rewrite
 
-	private void InitChunks()
+	} //rewrite	
+
+    private void InitChunks()
 	{
 		for (int x = 0; x < Width; x++)
 			for (int z = 0; z < Width; z++)
-				chunks.Add(Chunk.ChunkFabric.Create(new Vector3Int(x, 0, z), material, transform));
+				chunks.Add(Chunk.Fabric.Create(new Vector3Int(x, 0, z), material, transform, bounds));
 	}
 
 	private void UpdateMeshData(Chunk chunk)
@@ -144,7 +146,7 @@ public class TerrainGenerator : MonoBehaviour
 				{
 					if (IsBlockVisible(ref position))
 					{
-						GetBlocksChunk(ref position).AddBlock(ref position, ref bounds);
+						GetBlocksChunk(ref position).AddBlock(ref position);
 					}
 				}
 			}
@@ -170,14 +172,15 @@ public class TerrainGenerator : MonoBehaviour
 		return false;
 	}
 
-	private void DestroyBlock(ref Vector3 position)
+	public void DestroyBlock(Vector3 position)
     {
 		if (blocks[(int)position.x, (int)position.y, (int)position.z] != false)
 		{
 			blocks[(int)position.x, (int)position.y, (int)position.z] = false;
+			
 			UpdateNeighboursVisibility(ref position);
 			UpdateTerrainMapAroundBlock(ref position);
-			GetBlocksChunk(ref position).DisableBlock(ref position);
+			UpdateMeshData(GetBlocksChunk(ref position));
 		}
 	}
 
@@ -192,7 +195,7 @@ public class TerrainGenerator : MonoBehaviour
 			if (IsPositionInBounds(neighbourPosition))
 			{
 				if(IsBlockVisible(ref neighbourPosition)) GetBlocksChunk(ref neighbourPosition).EnableBlock(ref neighbourPosition);
-				else GetBlocksChunk(ref neighbourPosition).DisableBlock(ref neighbourPosition);
+				else GetBlocksChunk(ref neighbourPosition).DisableBlock(neighbourPosition);
 			}
 			else continue;
 		}
@@ -206,23 +209,28 @@ public class TerrainGenerator : MonoBehaviour
 		}
         else
         {
-			FillBlock(ref position, 1f);
-			Vector3 neighbourPosition;
-			Vector3Int neighbours = Vector3Int.zero;
-			for (neighbours.x = -1; neighbours.x <= 1; neighbours.x++)
-			{
-				for (neighbours.y = -1; neighbours.y <= 1; neighbours.y++)
-				{
-					for (neighbours.z = -1; neighbours.z <= 1; neighbours.z++)
-					{
-						neighbourPosition = position + neighbours;
-						if (IsPositionInBounds(neighbourPosition) && blocks[(int)neighbourPosition.x, (int)neighbourPosition.y, (int)neighbourPosition.z])
-							FillBlock(ref neighbourPosition, 0f);
-					}
-				}
-			}
-		}
-	}
+            //FillBlock(ref position, 1f);
+            Vector3 neighbourPosition;
+            Vector3Int neighbours = Vector3Int.zero;
+            for (neighbours.x = -1; neighbours.x <= 1; neighbours.x++)
+            {
+                for (neighbours.y = -1; neighbours.y <= 1; neighbours.y++)
+                {
+                    for (neighbours.z = -1; neighbours.z <= 1; neighbours.z++)
+                    {
+                        neighbourPosition = position + neighbours;
+                        if (IsPositionInBounds(neighbourPosition))
+                        {
+                            Vector3Int pos = new Vector3Int((int)neighbourPosition.x, (int)neighbourPosition.y, (int)neighbourPosition.z);
+                            if (blocks[pos.x, pos.y, pos.z] == true)
+								terrainMap[(int)neighbourPosition.x, (int)neighbourPosition.y, (int)neighbourPosition.z] = 0f;
+							else terrainMap[(int)neighbourPosition.x, (int)neighbourPosition.y, (int)neighbourPosition.z] = 1f;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private Chunk GetBlocksChunk(ref Vector3 position)
     {

@@ -136,7 +136,7 @@ public class CameraController : MonoBehaviour
 
     private void RotateCamera(InputAction.CallbackContext inputValue)
     {
-        if (!Mouse.current.rightButton.isPressed) return;
+        if (!Mouse.current.middleButton.isPressed) return;
 
         float value = inputValue.ReadValue<Vector2>().x;
         float valueY = inputValue.ReadValue<Vector2>().y;

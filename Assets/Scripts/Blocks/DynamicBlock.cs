@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DynamicBlock : MonoBehaviour, IBlock
+public class DynamicBlock : MonoBehaviour, IBlock, IPoolable<DynamicBlock>
 {
     [SerializeField]
     private Mesh mesh;
@@ -18,6 +19,8 @@ public class DynamicBlock : MonoBehaviour, IBlock
     private Vector3 cornerLocation;
     private int pointsAmount;
     private SnapPoint[] snapPoints;
+
+    private Action<DynamicBlock> returnToPool;
 
     void Start()
     {
@@ -39,6 +42,27 @@ public class DynamicBlock : MonoBehaviour, IBlock
         CreateSnapPoints(GetPointsData());
     }
 
+    private void OnDisable()
+    {
+        ReturnToPool();
+    }
+
+    public void Initialize(Action<DynamicBlock> returnAction)
+    {
+        returnToPool = returnAction;
+    }
+
+    public void ReturnToPool()
+    {
+        transform.position = Vector3.zero;
+        returnToPool?.Invoke(this);
+    }
+
+    public void DeleteBlock()
+    {
+        ReturnToPool();
+    }
+
     public bool PlaceBlock(IBlock block, SnapPoint snapPoint)
     {
         Vector3 thisPosition = GetRotation() * snapPoint.GetLocalPosition() + GetPosition();
@@ -48,7 +72,7 @@ public class DynamicBlock : MonoBehaviour, IBlock
 
         Vector3 blockPosition = block.GetRotation() * blockSnapPoint.GetLocalPosition() + block.GetPosition();
         block.SetPosition(block.GetPosition() + Vector3.Normalize(thisPosition - blockPosition) * Vector3.Distance(thisPosition, blockPosition));
-        snapPoint.Active(false);
+        //snapPoint.Active(false);
         return true;
     }
 

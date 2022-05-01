@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8795454359546163487}
   - component: {fileID: -133425564246805416}
   - component: {fileID: 7743896342522072069}
+  - component: {fileID: 6711308830289178489}
   m_Layer: 6
   m_Name: Block
   m_TagString: Untagged
@@ -128,3 +129,15 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 47685ee0129ff6049b925d4b064468a3, type: 2}
   pointsPerAxis: {x: 1, y: 1, z: 1}
   DisabledPoints: []
+--- !u!114 &6711308830289178489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080200230510197722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e038bf700cfa444fb16c6ef963be9f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

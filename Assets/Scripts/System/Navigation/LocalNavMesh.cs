@@ -1,19 +1,29 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 [DefaultExecutionOrder(-102)]
 public class LocalNavMesh : MonoBehaviour
 {
-    NavMeshManager navMeshManager;
+    public event Action<LocalNavMesh> UpdateNavMesh;
+    public event Action<LocalNavMesh> Disabled;
+    public event Action<LocalNavMesh> Enabled;
 
     private Bounds bounds;
     private float UpdateDistance;
 
-    void OnEnable()
+    private void OnEnable()
     {
+        Enabled?.Invoke(this);
+
         bounds.center = transform.position;
+    }
+
+    private void OnDisable()
+    {
+        Disabled?.Invoke(this);
     }
 
     private void Update()
@@ -21,7 +31,7 @@ public class LocalNavMesh : MonoBehaviour
         if (Vector3.Distance(bounds.center, transform.position) >= UpdateDistance)
         {
             bounds.center = transform.position;
-            navMeshManager.UpdateNavMesh(this);
+            UpdateNavMesh?.Invoke(this);
         }
     }
 
@@ -35,7 +45,7 @@ public class LocalNavMesh : MonoBehaviour
         return GetBounds().Intersects(bounds);
     }
 
-        static Vector3 Quantize(Vector3 v, Vector3 quant)
+    private static Vector3 Quantize(Vector3 v, Vector3 quant)
     {
         float x = quant.x * Mathf.Floor(v.x / quant.x);
         float y = quant.y * Mathf.Floor(v.y / quant.y);
@@ -43,7 +53,7 @@ public class LocalNavMesh : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
-    Bounds QuantizedBounds()
+    private Bounds QuantizedBounds()
     {
         return new Bounds(Quantize(transform.position, 0.1f * bounds.size), bounds.size);
     }
@@ -61,7 +71,7 @@ public class LocalNavMesh : MonoBehaviour
 
     public static class Factory
     {
-        public static LocalNavMesh Create(Transform target, Vector3 size,NavMeshManager manager)
+        public static LocalNavMesh Create(Transform target, Vector3 size)
         {
             LocalNavMesh localNavMesh = target.gameObject.AddComponent<LocalNavMesh>();
 
@@ -70,7 +80,6 @@ public class LocalNavMesh : MonoBehaviour
             localNavMesh.UpdateDistance = localNavMesh.bounds.size.x >= localNavMesh.bounds.size.z ? 
                 localNavMesh.bounds.size.z / 3 : localNavMesh.bounds.size.x / 3;
 
-            localNavMesh.navMeshManager = manager;
             return localNavMesh;
         }
     }

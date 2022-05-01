@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Delete",
+                    "type": "Button",
+                    "id": "e01b71aa-0f59-4d2e-9c95-9d71d4552f56",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -88,6 +97,17 @@
                     "action": "DisableBuildMode",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8944d56-e261-468e-8468-40ec3a7e9320",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Delete",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -108,15 +128,6 @@
                     "name": "Order",
                     "type": "Button",
                     "id": "578caba9-577d-4992-8b52-3e019a73c84d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Delete",
-                    "type": "Button",
-                    "id": "5aa0d6a2-518f-49d2-aaf7-0cd6cb23fee9",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -143,17 +154,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Order",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5ac1d96c-5781-48f5-8e68-b9e40c786db9",
-                    "path": "<Keyboard>/delete",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Delete",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

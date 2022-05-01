@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StaticBlock : IBlock
 {
+    private Vector3 coord;
     private Vector3Int pointsPerAxis;
     private SnapPoint[] snapPoints;
     private BoxCollider collider;
@@ -13,10 +14,12 @@ public class StaticBlock : IBlock
     private Vector3 cornerLocation;
     private int pointsAmount;
 
-    public void SetUp(BoxCollider collider, Vector3Int pointsPerAxis)
+    public void SetUp(BoxCollider collider, Vector3Int pointsPerAxis, Vector3 coord)
     {
         this.collider = collider;
         this.pointsPerAxis = pointsPerAxis;
+        this.coord = coord;
+
         pointsAmount = GetPointsAmount();
         snapPoints = new SnapPoint[pointsAmount];
 
@@ -29,6 +32,11 @@ public class StaticBlock : IBlock
     public void Disable()
     {
         collider.enabled = false;
+    }
+
+    public void Destroy()
+    {
+        GameObject.Destroy(collider);
     }
 
     public void Enable()
@@ -63,6 +71,12 @@ public class StaticBlock : IBlock
         return true;
     }
 
+    public void DeleteBlock()
+    {
+        Disable();
+        collider.GetComponent<Chunk>().RemoveBlock(this);
+    }
+
     public SnapPoint GetClosestSnapPoint(Vector3 face, Vector3 location)
     {
         SnapPoint closest = null;
@@ -77,6 +91,7 @@ public class StaticBlock : IBlock
         }
         return closest;
     }
+
     public SnapPoint GetActiveSnapPoint(Vector3 face)
     {
         return GetClosestSnapPoint(face * -1, GetRotation() * cornerLocation);
@@ -181,5 +196,9 @@ public class StaticBlock : IBlock
     public BoxCollider GetCollider()
     {
         return collider;
+    }
+    public Vector3 GetCoord()
+    {
+        return coord;
     }
 }

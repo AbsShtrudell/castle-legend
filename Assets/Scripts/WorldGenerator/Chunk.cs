@@ -5,15 +5,16 @@ using UnityEngine;
 public class Chunk : MonoBehaviour
 {
     private Vector3Int coord;
+    private Vector3 blockSize;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
     private LODGroup lodGroup;
     private Material material;
     private List<MeshRenderer> LODS = new List<MeshRenderer>();
-    private List<KeyValuePair<Vector3, StaticBlock>> blocksMap = new List<KeyValuePair<Vector3, StaticBlock>>();
+    private List<StaticBlock> blocksMap = new List<StaticBlock>();
 
-    private void SetUp(Material mat)
+    private void SetUp(Material mat, Vector3 blockSize)
     {
         GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) mesh");
         go.transform.parent = transform.parent.transform;
@@ -21,7 +22,6 @@ public class Chunk : MonoBehaviour
         meshFilter = go.GetComponent<MeshFilter>();
         meshRenderer = go.GetComponent<MeshRenderer>();
         meshCollider = go.GetComponent<MeshCollider>();
-        lodGroup = GetComponent<LODGroup>();
 
         if (meshFilter == null)
         {
@@ -39,11 +39,6 @@ public class Chunk : MonoBehaviour
             meshCollider = go.gameObject.AddComponent<MeshCollider>();
         }
 
-        if (lodGroup == null)
-        {
-            lodGroup = gameObject.AddComponent<LODGroup>();
-        }
-
         gameObject.AddComponent<StaticBlockQueue>();
         go.AddComponent<NavMeshSourceTag>();
 
@@ -52,6 +47,8 @@ public class Chunk : MonoBehaviour
 
         material = mat;
         meshRenderer.material = material;
+
+        this.blockSize = blockSize;
 
         go.gameObject.layer = LayerMask.NameToLayer("Terrain");
         gameObject.layer = LayerMask.NameToLayer("StaticBlock");
@@ -65,73 +62,56 @@ public class Chunk : MonoBehaviour
         meshCollider.enabled = true;
     }
 
-    //public void SetLOD(Mesh[] meshes)
-    //{
-    //    LOD[] lods = new LOD[4];
-    //    Renderer[] renderers = new Renderer[1];
-    //    renderers[0] = meshRenderer;
-    //    lods[0] = new LOD(1.0F / (1), renderers);
-
-    //    for (int i = 1; i < meshes.Length; i++)
-    //    {
-    //        GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) LOD {i + 1}");
-    //        go.transform.parent = gameObject.transform;
-    //        LODS.Add(go.gameObject.AddComponent<MeshRenderer>());
-    //        go.gameObject.AddComponent<MeshFilter>().sharedMesh = meshes[i-1];
-    //        LODS[LODS.Count - 1].sharedMaterial = material;
-    //        renderers = new Renderer[1];
-    //        renderers[0] = go.GetComponent<Renderer>();
-    //        lods[i] = new LOD(1.0F / (i + 1), renderers);
-    //    }
-    //    lodGroup.SetLODs(lods);
-    //    lodGroup.RecalculateBounds();
-    //    lodGroup.size = 50;
-    //}
-
-    public void AddBlock(ref Vector3 position,ref Vector3 blockSize)
+    public void AddBlock(ref Vector3 position)
     {
         BoxCollider collider = gameObject.AddComponent<BoxCollider>();
         collider.size = blockSize;
         collider.center = new Vector3(position.x * collider.size.x + collider.size.x / 2, position.y * collider.size.y, position.z * collider.size.z + collider.size.z / 2);
 
         StaticBlock block = new StaticBlock();
-        block.SetUp(collider, new Vector3Int(1, 1, 1));
+        block.SetUp(collider, new Vector3Int(1, 1, 1), position);
 
-        blocksMap.Add(new KeyValuePair<Vector3, StaticBlock>(position, block));
+        blocksMap.Add(block);
+    }
+
+    public void RemoveBlock(StaticBlock block)
+    {
+        transform.parent.GetComponent<TerrainGenerator>().DestroyBlock(block.GetCoord()); 
+        //blocksMap.Remove(block);
     }
 
     public StaticBlock GetBlock(BoxCollider collider)
     {
         foreach (var block in blocksMap)
         {
-            if (block.Value.GetCollider() == collider)
+            if (block.GetCollider() == collider)
             {
-                return block.Value;
+                return block;
             }
         }
         return null;
     }
 
-    public bool EnableBlock(ref Vector3 position)
+    public void EnableBlock(ref Vector3 position)
     {
         foreach (var block in blocksMap)
         {
-            if (block.Key == position)
+            if (block.GetCoord() == position)
             {
-                block.Value.Enable();
-                return true;
+                block.Enable();
+                return;
             }
         }
-        return false;
+        AddBlock(ref position);
     }
 
-    public bool DisableBlock(ref Vector3 position)
+    public bool DisableBlock(Vector3 position)
     {
         foreach (var block in blocksMap)
         {
-            if (block.Key == position)
+            if (block.GetCoord() == position)
             {
-                block.Value.Disable();
+                block.Disable();
                 return true;
             }
         }
@@ -149,16 +129,16 @@ public class Chunk : MonoBehaviour
         return coord;
     }
 
-    public static class ChunkFabric
+    public static class Fabric
     {
-        public static Chunk Create(Vector3Int coord, Material mat, Transform parent)
+        public static Chunk Create(Vector3Int coord, Material mat, Transform parent, Vector3 blockSize)
         {
             GameObject chunk = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z})");
             chunk.transform.parent = parent;
             Chunk newChunk = chunk.AddComponent<Chunk>();
 
             newChunk.coord = coord;
-            newChunk.SetUp(mat);
+            newChunk.SetUp(mat, blockSize);
 
             return newChunk;
         }
