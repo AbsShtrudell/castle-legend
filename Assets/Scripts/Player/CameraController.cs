@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        zoomHeight = minHeight;
+        zoomHeight = maxHeight;
         cameraTransform.LookAt(this.transform);
 
         lastPosition = this.transform.position;

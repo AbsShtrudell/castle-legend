@@ -46,18 +46,9 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""DisableBuildMode"",
+                    ""name"": ""ChangeMode"",
                     ""type"": ""Button"",
                     ""id"": ""64a8f9b0-b99e-49a3-ae70-dc7ff9bfb0aa"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Delete"",
-                    ""type"": ""Button"",
-                    ""id"": ""e01b71aa-0f59-4d2e-9c95-9d71d4552f56"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -90,7 +81,7 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""negative"",
                     ""id"": ""73fb07e4-1aeb-4f44-90b1-6ae696d8a1f7"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -101,7 +92,7 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""positive"",
                     ""id"": ""5d92ddf4-b58f-4a5c-996a-2ca86f36d430"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -112,22 +103,11 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""c2e29d6b-4b86-458d-993c-2143a9425433"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DisableBuildMode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a8944d56-e261-468e-8468-40ec3a7e9320"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Delete"",
+                    ""action"": ""ChangeMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -180,6 +160,74 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Terrain"",
+            ""id"": ""5f1e1dbf-73f2-45cc-9ba0-ef0a26994023"",
+            ""actions"": [
+                {
+                    ""name"": ""Remove"",
+                    ""type"": ""Button"",
+                    ""id"": ""18a26a90-1517-42de-8a31-5748f8162eb1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Add"",
+                    ""type"": ""Button"",
+                    ""id"": ""6731036b-2066-4892-a5df-fcc41326e79f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbc67da1-2b1a-4a9c-8979-38b6531609af"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0ed18448-7736-43e9-99a3-e2d58de24f69"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""81d22013-7aeb-4bb2-a760-fe6877ecce5a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Add"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79759a69-db18-4328-9595-c4999412ce31"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -188,12 +236,16 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_Place = m_Build.FindAction("Place", throwIfNotFound: true);
         m_Build_Rotate = m_Build.FindAction("Rotate", throwIfNotFound: true);
-        m_Build_DisableBuildMode = m_Build.FindAction("DisableBuildMode", throwIfNotFound: true);
-        m_Build_Delete = m_Build.FindAction("Delete", throwIfNotFound: true);
+        m_Build_ChangeMode = m_Build.FindAction("ChangeMode", throwIfNotFound: true);
         // Controll
         m_Controll = asset.FindActionMap("Controll", throwIfNotFound: true);
         m_Controll_Select = m_Controll.FindAction("Select", throwIfNotFound: true);
         m_Controll_Order = m_Controll.FindAction("Order", throwIfNotFound: true);
+        // Terrain
+        m_Terrain = asset.FindActionMap("Terrain", throwIfNotFound: true);
+        m_Terrain_Remove = m_Terrain.FindAction("Remove", throwIfNotFound: true);
+        m_Terrain_Add = m_Terrain.FindAction("Add", throwIfNotFound: true);
+        m_Terrain_ChangeMode = m_Terrain.FindAction("ChangeMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -255,16 +307,14 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
     private IBuildActions m_BuildActionsCallbackInterface;
     private readonly InputAction m_Build_Place;
     private readonly InputAction m_Build_Rotate;
-    private readonly InputAction m_Build_DisableBuildMode;
-    private readonly InputAction m_Build_Delete;
+    private readonly InputAction m_Build_ChangeMode;
     public struct BuildActions
     {
         private @PlayerControlActions m_Wrapper;
         public BuildActions(@PlayerControlActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Place => m_Wrapper.m_Build_Place;
         public InputAction @Rotate => m_Wrapper.m_Build_Rotate;
-        public InputAction @DisableBuildMode => m_Wrapper.m_Build_DisableBuildMode;
-        public InputAction @Delete => m_Wrapper.m_Build_Delete;
+        public InputAction @ChangeMode => m_Wrapper.m_Build_ChangeMode;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -280,12 +330,9 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @Rotate.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotate;
                 @Rotate.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotate;
                 @Rotate.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnRotate;
-                @DisableBuildMode.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
-                @DisableBuildMode.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
-                @DisableBuildMode.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDisableBuildMode;
-                @Delete.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
-                @Delete.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
-                @Delete.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnDelete;
+                @ChangeMode.started -= m_Wrapper.m_BuildActionsCallbackInterface.OnChangeMode;
+                @ChangeMode.performed -= m_Wrapper.m_BuildActionsCallbackInterface.OnChangeMode;
+                @ChangeMode.canceled -= m_Wrapper.m_BuildActionsCallbackInterface.OnChangeMode;
             }
             m_Wrapper.m_BuildActionsCallbackInterface = instance;
             if (instance != null)
@@ -296,12 +343,9 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
                 @Rotate.started += instance.OnRotate;
                 @Rotate.performed += instance.OnRotate;
                 @Rotate.canceled += instance.OnRotate;
-                @DisableBuildMode.started += instance.OnDisableBuildMode;
-                @DisableBuildMode.performed += instance.OnDisableBuildMode;
-                @DisableBuildMode.canceled += instance.OnDisableBuildMode;
-                @Delete.started += instance.OnDelete;
-                @Delete.performed += instance.OnDelete;
-                @Delete.canceled += instance.OnDelete;
+                @ChangeMode.started += instance.OnChangeMode;
+                @ChangeMode.performed += instance.OnChangeMode;
+                @ChangeMode.canceled += instance.OnChangeMode;
             }
         }
     }
@@ -347,16 +391,70 @@ public partial class @PlayerControlActions : IInputActionCollection2, IDisposabl
         }
     }
     public ControllActions @Controll => new ControllActions(this);
+
+    // Terrain
+    private readonly InputActionMap m_Terrain;
+    private ITerrainActions m_TerrainActionsCallbackInterface;
+    private readonly InputAction m_Terrain_Remove;
+    private readonly InputAction m_Terrain_Add;
+    private readonly InputAction m_Terrain_ChangeMode;
+    public struct TerrainActions
+    {
+        private @PlayerControlActions m_Wrapper;
+        public TerrainActions(@PlayerControlActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Remove => m_Wrapper.m_Terrain_Remove;
+        public InputAction @Add => m_Wrapper.m_Terrain_Add;
+        public InputAction @ChangeMode => m_Wrapper.m_Terrain_ChangeMode;
+        public InputActionMap Get() { return m_Wrapper.m_Terrain; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TerrainActions set) { return set.Get(); }
+        public void SetCallbacks(ITerrainActions instance)
+        {
+            if (m_Wrapper.m_TerrainActionsCallbackInterface != null)
+            {
+                @Remove.started -= m_Wrapper.m_TerrainActionsCallbackInterface.OnRemove;
+                @Remove.performed -= m_Wrapper.m_TerrainActionsCallbackInterface.OnRemove;
+                @Remove.canceled -= m_Wrapper.m_TerrainActionsCallbackInterface.OnRemove;
+                @Add.started -= m_Wrapper.m_TerrainActionsCallbackInterface.OnAdd;
+                @Add.performed -= m_Wrapper.m_TerrainActionsCallbackInterface.OnAdd;
+                @Add.canceled -= m_Wrapper.m_TerrainActionsCallbackInterface.OnAdd;
+                @ChangeMode.started -= m_Wrapper.m_TerrainActionsCallbackInterface.OnChangeMode;
+                @ChangeMode.performed -= m_Wrapper.m_TerrainActionsCallbackInterface.OnChangeMode;
+                @ChangeMode.canceled -= m_Wrapper.m_TerrainActionsCallbackInterface.OnChangeMode;
+            }
+            m_Wrapper.m_TerrainActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Remove.started += instance.OnRemove;
+                @Remove.performed += instance.OnRemove;
+                @Remove.canceled += instance.OnRemove;
+                @Add.started += instance.OnAdd;
+                @Add.performed += instance.OnAdd;
+                @Add.canceled += instance.OnAdd;
+                @ChangeMode.started += instance.OnChangeMode;
+                @ChangeMode.performed += instance.OnChangeMode;
+                @ChangeMode.canceled += instance.OnChangeMode;
+            }
+        }
+    }
+    public TerrainActions @Terrain => new TerrainActions(this);
     public interface IBuildActions
     {
         void OnPlace(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
-        void OnDisableBuildMode(InputAction.CallbackContext context);
-        void OnDelete(InputAction.CallbackContext context);
+        void OnChangeMode(InputAction.CallbackContext context);
     }
     public interface IControllActions
     {
         void OnSelect(InputAction.CallbackContext context);
         void OnOrder(InputAction.CallbackContext context);
+    }
+    public interface ITerrainActions
+    {
+        void OnRemove(InputAction.CallbackContext context);
+        void OnAdd(InputAction.CallbackContext context);
+        void OnChangeMode(InputAction.CallbackContext context);
     }
 }

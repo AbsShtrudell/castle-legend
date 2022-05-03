@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,23 @@ public class Chunk : MonoBehaviour
 {
     private Vector3Int coord;
     private Vector3 blockSize;
+
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
-    private LODGroup lodGroup;
+
     private Material material;
-    private List<MeshRenderer> LODS = new List<MeshRenderer>();
     private List<StaticBlock> blocksMap = new List<StaticBlock>();
+
+    private event Action<Vector3> destroyBlock;
+    private event Action<Vector3> addBlock;
+
+    //-----------Object Controll-----------//
 
     private void SetUp(Material mat, Vector3 blockSize)
     {
         GameObject go = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z}) mesh");
+
         go.transform.parent = transform.parent.transform;
 
         meshFilter = go.GetComponent<MeshFilter>();
@@ -54,47 +61,63 @@ public class Chunk : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("StaticBlock");
     }
 
-    public void SetMesh(Mesh mesh)
+    public static class ChunkFabric
     {
-        meshFilter.sharedMesh = mesh;
-        meshCollider.sharedMesh = mesh;
-        meshCollider.enabled = false;
-        meshCollider.enabled = true;
+        public static Chunk Create(Vector3Int coord, Material mat, Transform parent, Vector3 blockSize, Action<Vector3> destroyBlockAction, Action<Vector3> addBlockAction)
+        {
+            GameObject chunk = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z})");
+            chunk.transform.parent = parent;
+            Chunk newChunk = chunk.AddComponent<Chunk>();
+
+            newChunk.coord = coord;
+            newChunk.destroyBlock += destroyBlockAction;
+            newChunk.addBlock += addBlockAction;
+            newChunk.SetUp(mat, blockSize);
+
+            return newChunk;
+        }
     }
 
-    public void AddBlock(ref Vector3 position)
+    //-----------Blocks Controll-----------//
+
+    public void AddBlock(Vector3 position)
     {
         BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+
         collider.size = blockSize;
         collider.center = new Vector3(position.x * collider.size.x + collider.size.x / 2, position.y * collider.size.y, position.z * collider.size.z + collider.size.z / 2);
 
         StaticBlock block = new StaticBlock();
-        block.SetUp(collider, new Vector3Int(1, 1, 1), position);
+        block.SetUp(collider, new Vector3Int(1, 1, 1), position, DestroyBlock);
 
         blocksMap.Add(block);
+
+        addBlock?.Invoke(position);
     }
 
-    public void RemoveBlock(StaticBlock block)
+    public void AddBlock(Collider collider, Vector3 normal)
     {
-        transform.parent.GetComponent<TerrainGenerator>().DestroyBlock(block.GetCoord()); 
-        //blocksMap.Remove(block);
-    }
-
-    public StaticBlock GetBlock(BoxCollider collider)
-    {
-        foreach (var block in blocksMap)
+        StaticBlock block = GetBlock((BoxCollider)collider);
+        StaticBlock newBlock;
+        if (block != null)
         {
-            if (block.GetCollider() == collider)
+            newBlock = GetBlock(block.GetCoord() + normal);
+            if (newBlock == null)
             {
-                return block;
+                AddBlock(block.GetCoord() + normal);
             }
         }
-        return null;
     }
 
-    public void EnableBlock(ref Vector3 position)
+    public void DestroyBlock(StaticBlock block)
     {
-        foreach (var block in blocksMap)
+        destroyBlock?.Invoke(block.GetCoord());
+        block.Disable();
+    }
+
+    public void EnableBlock(Vector3 position)
+    {
+        foreach (StaticBlock block in blocksMap)
         {
             if (block.GetCoord() == position)
             {
@@ -102,7 +125,7 @@ public class Chunk : MonoBehaviour
                 return;
             }
         }
-        AddBlock(ref position);
+        AddBlock(position);
     }
 
     public bool DisableBlock(Vector3 position)
@@ -124,23 +147,42 @@ public class Chunk : MonoBehaviour
         return new Vector3((collider.center.x - collider.size.x / 2)/ collider.size.x, collider.center.y / collider.size.y, (collider.center.z - collider.size.z / 2) / collider.size.z);
     }
 
+    //-----------getters/setters-----------//
+
+    public void SetMesh(Mesh mesh)
+    {
+        meshFilter.sharedMesh = mesh;
+        meshCollider.sharedMesh = mesh;
+        meshCollider.enabled = false;
+        meshCollider.enabled = true;
+    }
+
+    public StaticBlock GetBlock(BoxCollider collider)
+    {
+        foreach (var block in blocksMap)
+        {
+            if (block.GetCollider() == collider)
+            {
+                return block;
+            }
+        }
+        return null;
+    }
+
+    public StaticBlock GetBlock(Vector3 position)
+    {
+        foreach (var block in blocksMap)
+        {
+            if (block.GetCoord() == position)
+            {
+                return block;
+            }
+        }
+        return null;
+    }
+
     public Vector3Int GetCoords()
     {
         return coord;
-    }
-
-    public static class Fabric
-    {
-        public static Chunk Create(Vector3Int coord, Material mat, Transform parent, Vector3 blockSize)
-        {
-            GameObject chunk = new GameObject($"Chunk ({coord.x}, {coord.y}, {coord.z})");
-            chunk.transform.parent = parent;
-            Chunk newChunk = chunk.AddComponent<Chunk>();
-
-            newChunk.coord = coord;
-            newChunk.SetUp(mat, blockSize);
-
-            return newChunk;
-        }
     }
 }

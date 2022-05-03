@@ -57,11 +57,14 @@ public class ObjectPool<T> : IPool<T> where T : MonoBehaviour, IPoolable<T>
 
     public void Push(T obj)
     {
-        pooledObject.Push(obj);
+        if (!pooledObject.Contains(obj))
+        {
+            pooledObject.Push(obj);
 
-        pushObject?.Invoke(obj);
+            pushObject?.Invoke(obj);
 
-        obj.gameObject.SetActive(false);
+            obj.gameObject.SetActive(false);
+        }
     }
 }
 

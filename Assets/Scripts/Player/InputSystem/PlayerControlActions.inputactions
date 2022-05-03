@@ -24,18 +24,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "DisableBuildMode",
+                    "name": "ChangeMode",
                     "type": "Button",
                     "id": "64a8f9b0-b99e-49a3-ae70-dc7ff9bfb0aa",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Delete",
-                    "type": "Button",
-                    "id": "e01b71aa-0f59-4d2e-9c95-9d71d4552f56",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -68,7 +59,7 @@
                 {
                     "name": "negative",
                     "id": "73fb07e4-1aeb-4f44-90b1-6ae696d8a1f7",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -79,7 +70,7 @@
                 {
                     "name": "positive",
                     "id": "5d92ddf4-b58f-4a5c-996a-2ca86f36d430",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -90,22 +81,11 @@
                 {
                     "name": "",
                     "id": "c2e29d6b-4b86-458d-993c-2143a9425433",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DisableBuildMode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a8944d56-e261-468e-8468-40ec3a7e9320",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Delete",
+                    "action": "ChangeMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -154,6 +134,74 @@
                     "processors": "",
                     "groups": "",
                     "action": "Order",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Terrain",
+            "id": "5f1e1dbf-73f2-45cc-9ba0-ef0a26994023",
+            "actions": [
+                {
+                    "name": "Remove",
+                    "type": "Button",
+                    "id": "18a26a90-1517-42de-8a31-5748f8162eb1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Add",
+                    "type": "Button",
+                    "id": "6731036b-2066-4892-a5df-fcc41326e79f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeMode",
+                    "type": "Button",
+                    "id": "bbc67da1-2b1a-4a9c-8979-38b6531609af",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0ed18448-7736-43e9-99a3-e2d58de24f69",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "81d22013-7aeb-4bb2-a760-fe6877ecce5a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Add",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "79759a69-db18-4328-9595-c4999412ce31",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

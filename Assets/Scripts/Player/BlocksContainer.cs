@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildItemsContainer : MonoBehaviour
+public class BlocksContainer : MonoBehaviour
 {
     [SerializeField]
     private BuildBlock[] buildBlocks;
     
-    public BuildBlock[] GetBuildBlocks()
+    public BuildBlock[] GetBlocks()
     {
         return buildBlocks;
     }
