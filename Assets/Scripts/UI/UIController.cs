@@ -161,6 +161,7 @@ public class UIController : MonoBehaviour
             int buttonIndex = i;
             GameObject go = Instantiate(ListButton.gameObject, BuildListPanel);
             go.GetComponent<Button>().onClick.AddListener(() => OnBuildItemSelected(buttonIndex));
+            go.GetComponent<Image>().sprite = blocksContainer.GetBlocks()[i].icon;
         }
     }
 

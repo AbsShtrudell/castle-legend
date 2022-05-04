@@ -24,4 +24,5 @@ public struct BuildBlock
     public GameObject buildBlock;
     public ResourceType resourceType;
     public float price;
+    public Sprite icon;
 }

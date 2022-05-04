@@ -123,50 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &53931647
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 53931649}
-  - component: {fileID: 53931648}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &53931648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 53931647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53c6da1b87a75b14394ddca5077e3d12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &53931649
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 53931647}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 144.78285, y: -71.403076, z: 94.63058}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &128044738
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,6 +802,26 @@ PrefabInstance:
       propertyPath: buildBlocks.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
+      propertyPath: buildBlocks.Array.data[0].icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 5fd4fae55b032cb49a389e8914b4fa93, type: 3}
+    - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
+      propertyPath: buildBlocks.Array.data[1].icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 0ed3cb94e185ebb41a752e8d7ddd6379, type: 3}
+    - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
+      propertyPath: buildBlocks.Array.data[2].icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 16392ca91be8a8244bfb10b4e4578564, type: 3}
+    - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
+      propertyPath: buildBlocks.Array.data[3].icon
+      value: 
+      objectReference: {fileID: 21300000, guid: fce57fdf0386f534f8df529ed1f639f8, type: 3}
+    - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
+      propertyPath: buildBlocks.Array.data[4].icon
+      value: 
+      objectReference: {fileID: 21300000, guid: 862b3316208b84747b916880253b4184, type: 3}
     - target: {fileID: 2882489590231754048, guid: aa89ace9a00fcf84583cfee0ce7126d1, type: 3}
       propertyPath: buildBlocks.Array.data[3].price
       value: 15
