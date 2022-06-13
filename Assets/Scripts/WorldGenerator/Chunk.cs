@@ -88,7 +88,7 @@ public class Chunk : MonoBehaviour
         collider.center = new Vector3(position.x * collider.size.x + collider.size.x / 2, position.y * collider.size.y, position.z * collider.size.z + collider.size.z / 2);
 
         StaticBlock block = new StaticBlock();
-        block.SetUp(collider, new Vector3Int(1, 1, 1), position, DestroyBlock);
+        block.SetUp(collider, Vector3Int.one, position, DestroyBlock);
 
         blocksMap.Add(block);
 

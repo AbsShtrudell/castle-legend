@@ -589,9 +589,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockRef: {fileID: 1836044884824062427, guid: 83422fd5274d51a4193787567683344b, type: 3}
   material: {fileID: 2100000, guid: 429e283e866befa49abc4396fd379187, type: 2}
-  Width: 10
-  Height: 8
-  ChunkSize: {x: 10, y: 0, z: 10}
+  Width: 25
+  Height: 10
+  ChunkSize: {x: 20, y: 0, z: 20}
   terrainSurface: 0.5
   noiseScale: 0.04
   offset: {x: 100, y: 100}

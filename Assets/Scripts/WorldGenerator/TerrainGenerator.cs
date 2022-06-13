@@ -203,6 +203,13 @@ public class TerrainGenerator : MonoBehaviour
 			UpdateNeighboursVisibility(ref position);
 			UpdateTerrainMapAroundBlock(ref position);
 			UpdateChunkMeshData(GetBlocksChunk(ref position));
+			for (int i = -1; i <= 1; i++)
+				for (int j = -1; j <= 1; j++)
+				{ 
+					Vector3 pos = new Vector3(position.x + i, position.y, position.z + i);
+					if (GetBlocksChunk(ref position) != GetBlocksChunk(ref pos))
+						UpdateChunkMeshData(GetBlocksChunk(ref pos));
+				}
 		}
 	}
 

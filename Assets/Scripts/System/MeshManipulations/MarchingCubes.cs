@@ -13,25 +13,22 @@ public static class MarchingCubes
 			return null;
 
 		int edgeIndex = 0;
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 16; i++)
 		{
-			for (int p = 0; p < 3; p++)
-			{
-				int indice = TriangleTable[configIndex, edgeIndex];
+			int indice = TriangleTable[configIndex, edgeIndex];
 
-				if (indice == -1)
-					return vertices.ToArray();
+			if (indice == -1)
+				return vertices.ToArray();
 
-				Vector3 vert1 = position + Cube.CornerTable[Cube.EdgeIndexes[indice, 0]];
-				vert1 = new Vector3(vert1.x * bounds.x, vert1.y * bounds.y, vert1.z * bounds.z);
-				Vector3 vert2 = position + Cube.CornerTable[Cube.EdgeIndexes[indice, 1]];
-				vert2 = new Vector3(vert2.x * bounds.x, vert2.y * bounds.y, vert2.z * bounds.z);
+			Vector3 vert1 = position + Cube.CornerTable[Cube.EdgeIndexes[indice, 0]];
+			vert1 = new Vector3(vert1.x * bounds.x, vert1.y * bounds.y, vert1.z * bounds.z);
+			Vector3 vert2 = position + Cube.CornerTable[Cube.EdgeIndexes[indice, 1]];
+			vert2 = new Vector3(vert2.x * bounds.x, vert2.y * bounds.y, vert2.z * bounds.z);
 
-				Vector3 vertPosition = (vert1 + vert2) / 2f;
+			Vector3 vertPosition = (vert1 + vert2) / 2f;
 
-				vertices.Add(vertPosition);
-				edgeIndex++;
-			}
+			vertices.Add(vertPosition);
+			edgeIndex++;
 		}
 		return vertices.ToArray();
 	}

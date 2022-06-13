@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        AddResources(1000);
+        AddResources(10000);
     }
 
     //-----------Logic-----------//
@@ -127,12 +127,14 @@ public class PlayerController : MonoBehaviour
         {
             if (destinationBlock != null && activeBlock != null)
             {
-                if(resourceAmount >= blocksContainer.GetBlocks()[lastBlockType].price)
-                destinationBlock.PlaceBlock(activeBlock, destinationHit.normal, destinationHit.point);
-                activeBlock.GetComponent<Collider>().enabled = true;
-                RemoveRecources(blocksContainer.GetBlocks()[lastBlockType].price);
-                activeBlock = null;
-                SetActiveObj(lastBlockType);
+                if (resourceAmount >= blocksContainer.GetBlocks()[lastBlockType].price)
+                {
+                    destinationBlock.PlaceBlock(activeBlock, destinationHit.normal, destinationHit.point);
+                    activeBlock.GetComponent<Collider>().enabled = true;
+                    RemoveRecources(blocksContainer.GetBlocks()[lastBlockType].price);
+                    activeBlock = null;
+                    SetActiveObj(lastBlockType);
+                }
             }
         }
     }
