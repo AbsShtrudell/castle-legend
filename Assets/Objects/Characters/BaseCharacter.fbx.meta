@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: e44f2d277203ca24f9b8b0ad559d6526
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: 4447012609936615250
@@ -252,7 +252,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.43925235
+        functionName: PlayEffect
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 738e6a30798e6924892d6bfe2cce5413, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -643,6 +650,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
